@@ -1,0 +1,71 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<title></title>
+	<link rel="stylesheet" href="w3.css">
+</head>
+
+<body>
+<table border="0" cellpadding="10" width="100%">
+    <tbody>
+        <tr>
+            <td width="45%">
+                <div class = "center">
+                    <h4>Send Payment Request</h4>
+                    <form action="request.php" method="post" target="_blank">
+                        Request from: <input type="text" name="payer_username"><br>
+                        Amount: <input type="number" step="any" name="amount"><br>
+                        <input type="radio" name="cryptoType" value = "BTC" checked> Bitcoin<br>
+                        <input type="radio" name="cryptoType" value = "ETH"> Ethereum<br>
+                        <input type="radio" name="cryptoType" value = "LTC"> Litecoin<br>
+                        <input type="submit" value="Send">
+                    </form>
+                </div>
+            </td>
+            <td width="45%">
+                <div class = "top">
+                    <h4>View Requests</h4>
+                    
+                    <form action="view_requests.php" method="get" target="_blank">
+    					<p align= "left">
+    						<input type="submit" value="View" /><br/>
+    					</p>
+    
+    				</form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td width="45%">
+                <div class = "center">
+                    <h4>Delete all Requests from User by Type</h4>
+                    <form action="delete_request.php" method="post" target="_blank">
+                        User (not you): <input type="text" name="payee_username"><br>
+                        <input type="radio" name="cryptoType" value = "BTC" checked> Bitcoin<br>
+                        <input type="radio" name="cryptoType" value = "ETH"> Ethereum<br>
+                        <input type="radio" name="cryptoType" value = "LTC"> Litecoin<br>
+                        <input type="submit" value="Delete">
+                    </form>
+                </div>
+            </td>
+        </tr>
+        
+         <tr>
+            <td width="45%">
+                <div class = "center">
+                    <h4>Accept request</h4>
+                    <form action="accept_request.php" method="post" target="_blank">
+                        Request time (example:2018-03-25 04:29:49)<input type="text" name="request_time"><br>
+                        <input type="radio" name="cryptoType" value = "BTC" checked> Bitcoin<br>
+                        <input type="radio" name="cryptoType" value = "ETH"> Ethereum<br>
+                        <input type="radio" name="cryptoType" value = "LTC"> Litecoin<br>
+                        <input type="submit" value="accept request">
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table> 
+    
+</body>
+
+</html>

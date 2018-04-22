@@ -1,0 +1,30 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<title></title>
+	<link rel="stylesheet" href="w3.css">
+</head>
+
+<body>
+    <h4>Buy Cryptocurrency</h4>
+    
+    <form action="data_generator.php" method="post" target="_blank">
+        Amount: <input type="number" step="any" name="amount"><br>
+        <input type="radio" name="cryptoType" value="btc" checked> Bitcoin<br>
+        <input type="radio" name="cryptoType" value="eth"> Ethereum<br>
+        <input type="radio" name="cryptoType" value="ltc"> Litecoin<br>
+        <input type ="submit" value="buyCrypto">
+    </form>
+    
+    <h4>Sell Cryptocurrency</h4>
+    
+    <form action="sell_crypto.php" method="post" target="_blank">
+        Amount: <input type="number" step="any" name="amount"><br>
+        <input type="radio" name="cryptoType" value="btc" checked> Bitcoin<br>
+        <input type="radio" name="cryptoType" value="eth"> Ethereum<br>
+        <input type="radio" name="cryptoType" value="ltc"> Litecoin<br>
+        <input type ="submit" value="sellCrypto">
+    </form>
+    
+</body>
+
+</html>

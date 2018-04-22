@@ -1,0 +1,86 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<title></title>
+	<link rel="stylesheet" href="w3.css">
+</head>
+
+<style>
+    .bgimg-1 {
+    background-position: center;
+    background-size: cover;
+    background-image: url("bg3.png");
+    min-height: 80%;
+}
+
+</style>
+
+<body>
+    
+<header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
+  <div class="w3-display-left w3-text-white" style="padding:48px">
+    <span class="w3-jumbo w3-hide-small">Cryptonyte</span><br>
+    <span class="w3-xxlarge w3-hide-large w3-hide-medium">CryptoNyte</span><br>
+    <span class="w3-large">
+
+						<form action="signin.php" method="post" target="_blank">
+						<p align="left">Username:&nbsp; <input name="username" type="text" /><br />
+						Password:&nbsp; <input name="password" type="password" /><br />
+						<input name="Sign In" onclick="document.location.href='crypto.html'" type="submit" value="Sign In" /></p>
+						</form>
+        
+    </span>
+    <p><a href="signup.php" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Sign Up</a></p>
+  </div> 
+</header>
+
+
+<table border="1" cellpadding="10" width="100%">
+	<tbody><!--
+		<tr>
+			<td align="center">
+			<h1>CryptoNyte</h1>
+			</td>
+		</tr>-->
+		<!--<tr>
+			<td class="topnav_middle">&nbsp;<a class="topnav" href="crypto.html" title="Gene homepage">Home</a> &nbsp;</td>
+			
+		</tr>-->
+		<tr>
+			<td align="center">
+			<table border="0" cellpadding="3" width="640">
+				<tbody>
+					<tr>
+						<td width="45%">
+						<div class="center">
+<!--
+						<h4>Sign In:</h4>
+
+						<form action="signin.php" method="post" target="_blank">
+						<p align="left">Username:&nbsp; <input name="username" type="text" /><br />
+						Password:&nbsp; <input name="password" type="password" /><br />
+						<input name="Sign In" onclick="document.location.href='crypto.html'" type="submit" value="Sign In" /></p>
+						</form>
+
+						<h4>Sign Up:</h4>
+
+						<input name="Sign Up" onclick="document.location.href='signup.php'" type="submit" value="Sign Up" /></p>
+						</form>
+-->						
+						<h4>Delete User:</h4>
+
+						<form action="delete.php" method="post" target="_blank">
+						<p align="left">Username:&nbsp; <input name="username" type="text" /><br />
+						Password:&nbsp; <input name="password" type="password" /><br />
+						<input name="Delete" onclick="document.location.href='crypto.html'" type="submit" value="Delete" /></p>
+						</form>
+						</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>
