@@ -34,14 +34,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $recipient_walletID = $row_recipientbalance['walletID'];
         $sql_transaction1 = "INSERT INTO Transaction (username, datetime, transaction_type, amount, type, to_, from_) " . "VALUES ('$sender_username', '$transaction_date', '$transaction_type', '$transaction_amount', '$currency_type', '$recipient_walletID', '$sender_walletID')";
         $sql_transaction2 = "INSERT INTO Transaction (username, datetime, transaction_type, amount, type, to_, from_) " . "VALUES ('$recipient_username', '$transaction_date', '$transaction_type', '$transaction_amount', '$currency_type', '$sender_walletID', '$recipient_walletID')";
-        echo "Able to retrieve balance!\n";
         #$_SESSION['balance'] = $result['balance'];
         if(($mysqli->query($sql_transaction1) == true) && ($mysqli->query($sql_transaction2) == true) && ($transaction_amount <= $row_userbalance['balance']) && ($result2->num_rows > 0)){
             $sender_balance = $row_userbalance['balance'] - $transaction_amount;
             $recipient_balance = $row_recipientbalance['balance'] + $transaction_amount;
             $sql_senderBalanceUpdate = "UPDATE Account SET balance='$sender_balance' WHERE username='$sender_username' AND type='$currency_type'";
             $sql_recipientBalanceUpdate = "UPDATE Account SET balance='$recipient_balance' WHERE username='$recipient_username' AND type='$currency_type'";
-            echo "User is present;$sender_balance;  $recipient_balance";
             
             if(($mysqli->query($sql_senderBalanceUpdate) == true) && ($mysqli->query($sql_recipientBalanceUpdate) == true)){
                 $_SESSION['transaction_message'] = "Transaction Successful!";

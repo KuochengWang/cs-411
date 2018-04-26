@@ -75,7 +75,7 @@ $l = json_encode($links);
     <script src='http://d3js.org/d3.v3.min.js'></script>
     <script>
 
-var width = 900,
+var width = 1200,
     height = 900;
 
 var nodes = <?php echo json_encode($items) ?>;
@@ -127,7 +127,8 @@ var node = svg.selectAll('.node')
     .data(nodes)
     .enter().append('circle')
     .attr('class', 'node')
-    .style("fill", circleColor);
+    .style("fill", circleColor)
+    .call(force.drag);
 
 function circleColor(d){
     if(d.Color == "0"){
@@ -157,10 +158,58 @@ function circleColor(d){
     if(d.Color == "8"){
         return "brown";
     }
+    if(d == "0"){
+        return "blue";
+    }
+    if(d == "1"){
+        return "green";
+    }
+    if(d == "2"){
+        return "orange";
+    }
+    if(d == "3"){
+        return "moccasin";
+    }
+    if(d == "4"){
+        return "purple";
+    }
+    if(d == "5"){
+        return "black";
+    }
+    if(d == "6"){
+        return "pink";
+    }
+    if(d == "7"){
+        return "gray";
+    }
+    if(d== "8"){
+        return "brown";
+    }
 	return "red";
 }
 
-force.on('end', function() {
+var legend = svg.selectAll(".legend")
+     .data(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])//hard coding the labels as the datset may have or may not have but legend should be complete.
+     .enter().append("g")
+     .attr("class", "legend")
+     .attr("transform", function(d, i) { return "translate(0," + i * 35 + ")"; });
+
+// draw legend colored rectangles
+legend.append("rect")
+     .attr("x", width - 35)
+     .attr("width", 30)
+     .attr("height", 30)
+     .style("fill",circleColor);
+
+// draw legend text
+legend.append("text")
+     .attr("x", width - 40)
+     .attr("y", 9)
+     .attr("dy", ".45em")
+     .style("text-anchor", "end")
+     .text(function(d){return d});
+
+force.on("tick", function() {
 
     node.attr('r', width/150)
         .attr('cx', function(d) { return d.x; })
@@ -196,4 +245,3 @@ force.start();
 </script>
 </body>
 </html>
-

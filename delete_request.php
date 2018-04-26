@@ -39,7 +39,7 @@ function deleteRequest($cryptoType, $payeeWallet, $payerWallet, $mysqli)
     $sql_delete = "DELETE FROM Request WHERE payee='$payeeWallet' AND payer='$payerWallet'";
     $delete_query = $mysqli->query($sql_delete);
     
-    echo($sql_delete);
+    echo("Request deleted!");
     
     if(!$mysqli->query($sql_delete))
     {

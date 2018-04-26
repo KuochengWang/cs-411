@@ -7,9 +7,23 @@ if ($mysqli->connect_errno) {
   
 session_start();
 
-$sql = "SELECT username AS Id, bankID AS group FROM `User`";
+#$sql = "SELECT username AS Id, bankID as Color, balance AS R FROM `User`";
 
-$sql_links = "SELECT (SELECT username FROM Account where from_ = walletID) AS Source, (SELECT username FROM Account where to_ = walletID) AS Target, amount AS Value 
+$sql = "SELECT username AS Id, bankID as Color, (SUM(b2) + b1) as R
+
+FROM (SELECT User.username, User.balance as b1, User.bankID,
+
+             Account.balance * IF(Account.type = 'LTC', 2, 1) * IF(Account.type = 'BTC', 3, 1) * IF(Account.type = 'ETH', 4, 1) as b2,
+
+             Account.type
+
+     FROM `User`
+
+     JOIN Account ON Account.username = User.username) AS C
+
+GROUP BY username";
+
+$sql_links = "SELECT (SELECT username FROM Account where from_ = walletID) AS Source, (SELECT username FROM Account where to_ = walletID) AS Target, amount AS weight
 FROM `Transaction`
 WHERE transaction_type='User' AND from_ IN (SELECT walletID FROM Account) AND to_ IN (SELECT walletID FROM Account)";
 
@@ -30,7 +44,7 @@ while($row_links = $result_links->fetch_assoc()) {
     $links[] = $row_links;
 }
  
-#var_dump($items);
+#echo json_encode($links);
  
 $j = json_encode($items);
 $l = json_encode($links);
@@ -51,8 +65,8 @@ $l = json_encode($links);
 }
 
 .link {
-    stroke: #777;
-    stroke-width: 2px;
+    stroke: #999;
+    stroke-opacity: 0.6;
 }
 
     </style>
@@ -61,17 +75,14 @@ $l = json_encode($links);
     <script src='http://d3js.org/d3.v3.min.js'></script>
     <script>
 
-var width = 1000,
-    height = 1000;
+var width = 1200,
+    height = 900;
 
-/*var nodes = [
-    { x:   width/3, y: height/2 },
-    { x: 2*width/3, y: height/2 }
-];*/
 var nodes = <?php echo json_encode($items) ?>;
+var nodes1 = {};
 
 var links = <?php echo json_encode($links) ?>;
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+
 var edges = [];
 links.forEach(function(e) {
     var sourceNode = nodes.filter(function(n) {
@@ -87,7 +98,13 @@ links.forEach(function(e) {
         value: e.Value
     });
 });
-
+console.log(edges);
+    edges.forEach(function(edge) {
+        edge.source = nodes1[edge.source] ||
+            (nodes1[egde.source] = {name: edge.source});
+        edge.target = nodes1[edge.target] ||
+            (nodes1[edge.target] = {name: edge.target});        
+    });
 
 var svg = d3.select('body').append('svg')
     .attr('width', width)
@@ -96,46 +113,157 @@ var svg = d3.select('body').append('svg')
 
 var force = d3.layout.force()
     .size([width, height])
-    .nodes(nodes)
-    .links(edges);
+    .nodes(d3.values(nodes))//modified
+    .links(edges)
+    .on("tick",tick)
+    .start();
 
-force.linkDistance(width/2);
+force.linkDistance(350);
 
 var link = svg.selectAll('.link')
     .data(edges)
     .enter().append('line')
     .attr('class', 'link');
+    
+function EdgeWidth(d){
+    var abc = "1.5";
+    if(d.Value == 1.535){
+        return 5;
+    }
+    return parseFloat(abc);
+}
 
 var node = svg.selectAll('.node')
-    .data(nodes)
+    .data(force.nodes())//nodes1
     .enter().append('circle')
     .attr('class', 'node')
-    .attr("fill", function(d) {return color(d.group);});
+    .style("fill", circleColor);
 
-force.on('end', function() {
+function circleColor(d){
+    if(d.Color == "0"){
+        return "blue";
+    }
+    if(d.Color == "1"){
+        return "green";
+    }
+    if(d.Color == "2"){
+        return "orange";
+    }
+    if(d.Color == "3"){
+        return "moccasin";
+    }
+    if(d.Color == "4"){
+        return "purple";
+    }
+    if(d.Color == "5"){
+        return "black";
+    }
+    if(d.Color == "6"){
+        return "pink";
+    }
+    if(d.Color == "7"){
+        return "gray";
+    }
+    if(d.Color == "8"){
+        return "brown";
+    }
+    if(d == "0"){
+        return "blue";
+    }
+    if(d == "1"){
+        return "green";
+    }
+    if(d == "2"){
+        return "orange";
+    }
+    if(d == "3"){
+        return "moccasin";
+    }
+    if(d == "4"){
+        return "purple";
+    }
+    if(d == "5"){
+        return "black";
+    }
+    if(d == "6"){
+        return "pink";
+    }
+    if(d == "7"){
+        return "gray";
+    }
+    if(d== "8"){
+        return "brown";
+    }
+	return "red";
+}
 
-    node.attr('r', width/150)
-        .attr('cx', function(d) { return d.x; })
-        .attr('cy', function(d) { return d.y; }));
-
+function tick(e){
+    node.attr('cx', function(d) { return d.x; })
+        .attr('cy', function(d) { return d.y; })
+        .call(force.drag);
     link.attr('x1', function(d) { return d.source.x; })
         .attr('y1', function(d) { return d.source.y; })
         .attr('x2', function(d) { return d.target.x; })
-        .attr('y2', function(d) { return d.target.y; });
+        .attr('y2', function(d) { return d.target.y; })
+    
+}
 
-});
+var legend = svg.selectAll(".legend")
+     .data(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])//hard coding the labels as the datset may have or may not have but legend should be complete.
+     .enter().append("g")
+     .attr("class", "legend")
+     .attr("transform", function(d, i) { return "translate(0," + i * 35 + ")"; });
+
+// draw legend colored rectangles
+legend.append("rect")
+     .attr("x", width - 35)
+     .attr("width", 30)
+     .attr("height", 30)
+     .style("fill",circleColor);
+
+// draw legend text
+legend.append("text")
+     .attr("x", width - 40)
+     .attr("y", 9)
+     .attr("dy", ".45em")
+     .style("text-anchor", "end")
+     .text(function(d){return d});
+     
+     
+
+// force.on('end', function() {
+
+//     node.attr('r', width/150)
+//         .attr('cx', function(d) { return d.x; })
+//         .attr('cy', function(d) { return d.y; })
+//         .attr("r", circleRad);
+
+//     link.attr('x1', function(d) { return d.source.x; })
+//         .attr('y1', function(d) { return d.source.y; })
+//         .attr('x2', function(d) { return d.target.x; })
+//         .attr('y2', function(d) { return d.target.y; })
+//         .attr("style", edgeWidth);
+
+// });
+
+function circleRad(d){
+    return Math.log(d.R) * 1.2;
+    if(d.R == 0){
+        return 1;
+    }
+    if(d.R > 2000){
+        return 10;
+    }
+	return d.R / 100 /2;
+}
+
+function edgeWidth(d){
+    return d.Value + 100;
+}
+
 
 force.start();
-
-/*d3.select("body").selectAll("p")
-            .data(dataset)
-            .enter()
-            .append("p")
-            .text(function(d) { return d.username });*/
-            
-
 
 </script>
 </body>
 </html>
-

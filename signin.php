@@ -46,7 +46,7 @@ if($success == true) {
 			</td>
 		</tr>
 		<tr>
-			<td class="topnav_middle">&nbsp;<a class="topnav" href="crypto.html" title="Gene homepage">Home</a> &nbsp;</td>
+
 		</tr>
 		<tr>
 			<td align="center">
@@ -75,8 +75,7 @@ if($success == true) {
 
 						
 						<input name="transaction" onclick="document.location.href='get_json.php'" type="submit" value="Click Here" /></p>
-						<h4>Links JSON</h4>
-						<input name="links" onclick="document.location.href='links.php'" type="submit" value="Click Here" /></p>
+						
 						</form>
 						</div>
 						</td>

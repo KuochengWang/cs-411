@@ -134,7 +134,7 @@ function updateTransaction($payer_username,$payee_walletID,$payer_walletID,$amou
     
     $sql_transaction = "INSERT INTO Transaction " . "VALUES ('$payer_username', '$date', 'User', $amount, '$cryptoType', '$payee_walletID','$payer_walletID')";
     
-    echo($sql_transaction);
+    echo("Request accepted!");
     
     if(!$mysqli->query($sql_transaction))
     {

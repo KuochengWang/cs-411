@@ -10,7 +10,7 @@ date_default_timezone_set('CST6CDT');
 $time = getdate();
 $mon = $time[mon];
 $day = $time[mday]; 
-$cryptoType = $_POST["cryptoType"];
+$cryptoType = strtoupper($_POST["cryptoType"]);
 $amount = $_POST["amount"];
 
 $BTCrate = 173.3 * (($mon-3)*30+$day) + 7530.9 + 10*(rand(0,1))+2*rand(0,1);
@@ -18,7 +18,6 @@ $ETHrate = 19.014 * (($mon-3)*30+$day) + 493.7 + 10*(rand(0,1))+2*rand(0,1);
 $LTCrate = 3.0108 * (($mon-3)*30+$day) + 148.84 + 10*(rand(0,1))+2*rand(0,1);
 
 session_start();
-echo("<strong>Welcome, " . $_SESSION["username"] . "!<strong>");
 
 $BTCrequest = $BTCrate * $amount;
 $ETHrequest = $ETHrate*$amount;
@@ -27,11 +26,11 @@ $request = 0;
 
 $username = $_SESSION["username"];
 
-if($cryptoType=="btc")
+if($cryptoType=="BTC")
 {
     $request = $BTCrequest;
 }
-else if($cryptoType=="eth")
+else if($cryptoType=="ETH")
 {
     $request = $ETHrequest;
 }
@@ -85,9 +84,9 @@ function checkBalance($wallet,$amount,$mysqli)
     }
     
     $wallet_balance = mysqli_fetch_row($balance_query);
-    echo($wallet_balance[0]);
-    if($wallet_balance[0]<$amount) {
-        echo("balance not enough");
+    if($wallet_balance[0]<$amount){
+        echo($wallet_balance[0]);
+        echo(" balance not enough");
         return false;
     }
     else
@@ -98,11 +97,11 @@ function checkBalance($wallet,$amount,$mysqli)
 
 function updateTransaction($username,$amount,$cryptoType,$mysqli,$wallet)
 {
-    if($cryptoType=="btc")
+    if($cryptoType=="BTC")
     {
         $supply = "Bitcoin Supply";
     }
-    else if($cryptoType=="eth")
+    else if($cryptoType=="ETH")
     {
         $supply = "Ethereum Supply";
     }
@@ -114,8 +113,6 @@ function updateTransaction($username,$amount,$cryptoType,$mysqli,$wallet)
     $date = date("Y-m-d") . " " . date("h:i:s") . ".";
     $sql_transaction = "INSERT INTO Transaction " . "VALUES ('$username', '$date', 'Market', $amount, '$cryptoType', '$supply','$wallet')";
     
-    echo($sql_transaction);
-    
     if(!$mysqli->query($sql_transaction))
     {
         echo("cannot find find the transaction");
@@ -124,12 +121,11 @@ function updateTransaction($username,$amount,$cryptoType,$mysqli,$wallet)
 
 function updateAccount($mysqli,$wallet,$amount)
 {
-    echo('test0');
     $sql_account = "UPDATE Account
     SET balance = balance - '$amount'
     WHERE walletid = '$wallet'";
     
-    echo($sql_account);
+    echo("Crypto sold!");
     
     if(!$mysqli->query($sql_account))
     {

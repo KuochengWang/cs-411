@@ -18,12 +18,13 @@ $cryptoTypes = array("BTC","LTC","ETH");
 for($i = 0; $i < count($cryptoTypes); $i++) {
     $cryptoType = $cryptoTypes[$i];
     $walletID = findWallet($cryptoType,$mysqli,$username);
-    $sql_request = "SELECT * FROM Request WHERE payee='$walletID'"; 
+    //$sql_request = "SELECT *, username FROM Request WHERE payee='$walletID'";
+    $sql_request = "SELECT datetime, amount, Request.type, username FROM Request, Account WHERE payer='$walletID' and walletID = payee";
     if ($result = $mysqli->query($sql_request)) {
     
         /* fetch associative array */
         while ($row = $result->fetch_assoc()) {
-            printf ("%s %s %s %s", $row["datetime"], $row["amount"],$row["type"],$row["payer"]);
+            printf ("%s %s %s %s", $row["datetime"], $row["amount"],$row["type"],$row["username"]);
               
             echo "<br>";
         }

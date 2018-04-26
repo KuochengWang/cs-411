@@ -10,7 +10,7 @@ date_default_timezone_set('CST6CDT');
 $time = getdate();
 $mon = $time[mon];
 $day = $time[mday]; 
-$cryptoType = $_POST["cryptoType"];
+$cryptoType = strtoupper($_POST["cryptoType"]);
 $amount = $_POST["amount"];
 
 $BTCrate = 173.3 * (($mon-3)*30+$day) + 7530.9 + 10*(rand(0,1))+2*rand(0,1);
@@ -18,7 +18,6 @@ $ETHrate = 19.014 * (($mon-3)*30+$day) + 493.7 + 10*(rand(0,1))+2*rand(0,1);
 $LTCrate = 3.0108 * (($mon-3)*30+$day) + 148.84 + 10*(rand(0,1))+2*rand(0,1);
 
 session_start();
-echo("<strong>Welcome, " . $_SESSION["username"] . "!<strong>");
 
 $BTCrequest = $BTCrate * $amount;
 $ETHrequest = $ETHrate*$amount;;
@@ -34,19 +33,14 @@ if(!$mysqli->query($sql))
 
 $balance_query = $mysqli->query($sql);
 $account_amount = mysqli_fetch_row($balance_query);
-echo ($account_amount[0]);
 
-echo("test0");
-
-echo($cryptoType);
-
-if($cryptoType=="btc")
+if($cryptoType=="BTC")
 {
     if($BTCrequest>$account_amount[0])
         $request = $BTCrequest;
       
 }
-else if($cryptoType=="eth")
+else if($cryptoType=="ETH")
 {
     if($ETHrequest>$account_amount[0])
         $request = $ETHrequest;
@@ -79,9 +73,9 @@ function checkBalance($mysqli,$username,$request)
     }
     
     $user_balance = mysqli_fetch_row($balance_query);
-    echo($user_balance[0]);
     if($user_balance[0]<$request) {
-        echo("balance not enough");
+        echo($user_balance[0]);
+        echo(" balance not enough");
         return false;
     }
     else
@@ -107,11 +101,11 @@ function findWallet($cryptoType,$mysqli,$username)
 
 function updateTransaction($username,$amount,$cryptoType,$mysqli,$wallet)
 {
-    if($cryptoType=="btc")
+    if($cryptoType=="BTC")
     {
         $supply = "Bitcoin Supply";
     }
-    else if($cryptoType=="eth")
+    else if($cryptoType=="ETH")
     {
         $supply = "Ethereum Supply";
     }
@@ -123,7 +117,7 @@ function updateTransaction($username,$amount,$cryptoType,$mysqli,$wallet)
     $date = date("Y-m-d") . " " . date("h:i:s") . ".";
     $sql_transaction = "INSERT INTO Transaction " . "VALUES ('$username', '$date', 'Market', $amount, '$cryptoType', '$wallet', '$supply')";
     
-    echo($sql_transaction);
+    echo("Crypto bought!");
     
     if(!$mysqli->query($sql_transaction))
     {
