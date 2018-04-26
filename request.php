@@ -44,7 +44,7 @@ function insertRequest($date, $amount, $cryptoType, $payeeWallet, $payerWallet, 
 {
     $sql_request = "INSERT INTO Request VALUES ('$date', '$amount', '$cryptoType', '$payeeWallet', '$payerWallet')";
     
-    echo($sql_request);
+    echo("Request sent!");
     
     if(!$mysqli->query($sql_request))
     {
